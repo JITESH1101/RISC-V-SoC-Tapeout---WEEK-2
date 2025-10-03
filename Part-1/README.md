@@ -26,6 +26,9 @@ A typical SoC architecture is composed of several distinct functional blocks, or
 
    - Power Management Unit (PMU): The PMU is responsible for managing the power consumption of the entire SoC. It controls voltage levels and clock frequencies for different blocks, enabling techniques like dynamic voltage and frequency scaling (DVFS). This allows parts of the chip to be powered down when not in use, which is critical for extending battery life in mobile and portable devices.
 
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/10dd4d49-9d93-4e98-ab10-fee88987f09b" />
+
+
 # BabySoC: A Simplified Model for Learning
 
 The BabySoC project is presented as a simplified yet effective model for learning fundamental SoC concepts. Its design is intentionally minimalistic, stripping away the immense complexity of a commercial SoC to allow learning to be focused on the core principles of component integration and interaction. The educational value of BabySoC is rooted in its focused architecture, which includes:
@@ -37,6 +40,8 @@ The BabySoC project is presented as a simplified yet effective model for learnin
    - A 10-bit Digital-to-Analog Converter (DAC): This serves as a practical example of a mixed-signal peripheral for interfacing with external analog systems. It tangibly demonstrates how the digital "ones and zeros" processed by the CPU can be translated into a real-world analog signal. The DAC in this context receives digital values from the RVMYTH processor and converts them into a continuous analog voltage. This function is essential for producing audio or video output for devices like televisions or speakers. Common implementations like the R-2R Ladder DAC are favored for their simplicity and scalability. The inclusion of the DAC bridges the gap between the purely digital domain of the processor and the analog nature of the physical world.
 
 By working with BabySoC, the process of integrating a CPU with essential peripherals is made tangible. It provides a clear platform for understanding how digital processing is linked with timing control and analog output.
+
+<img width="2270" height="1260" alt="image" src="https://github.com/user-attachments/assets/e29c6203-a12f-474d-8f6b-b0c1281e15ac" />
 
 # The Critical Role of Functional Modelling and Design Flow
 
