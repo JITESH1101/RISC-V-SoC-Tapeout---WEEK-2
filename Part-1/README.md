@@ -37,6 +37,9 @@ The BabySoC project is presented as a simplified yet effective model for learnin
 
    - A Phase-Locked Loop (PLL): This IP core is included for stable on-chip clock generation, a critical element for teaching system timing and synchronization. In any synchronous digital system, a stable clock is paramount. An on-chip PLL is necessary because external clock sources can introduce timing variations (jitter), and distributing a single clock across a chip can lead to delays and skew. Furthermore, different blocks within an SoC may require different clock frequencies. The PLL demonstrates how an SoC can generate a precise, stable internal clock from a less precise external source, a fundamental requirement for reliable high-speed operation.
 
+<img width="885" height="535" alt="image" src="https://github.com/user-attachments/assets/a63008da-e679-4214-b999-4ad683869d91" />
+
+
    - A 10-bit Digital-to-Analog Converter (DAC): This serves as a practical example of a mixed-signal peripheral for interfacing with external analog systems. It tangibly demonstrates how the digital "ones and zeros" processed by the CPU can be translated into a real-world analog signal. The DAC in this context receives digital values from the RVMYTH processor and converts them into a continuous analog voltage. This function is essential for producing audio or video output for devices like televisions or speakers. Common implementations like the R-2R Ladder DAC are favored for their simplicity and scalability. The inclusion of the DAC bridges the gap between the purely digital domain of the processor and the analog nature of the physical world.
 
 By working with BabySoC, the process of integrating a CPU with essential peripherals is made tangible. It provides a clear platform for understanding how digital processing is linked with timing control and analog output.
