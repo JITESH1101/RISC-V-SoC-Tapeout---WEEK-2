@@ -8,7 +8,7 @@ This week task is divided into two parts , they are
 
 - Part 2 – Labs (Hands-on Functional Modelling)- https://github.com/JITESH1101/RISC-V-SoC-Tapeout---WEEK-2/blob/main/Part-2/README.md
 
-These link will direct to the respective task of this week.
+These links will direct to the respective task of this week.
 
 # Conclusion
 
