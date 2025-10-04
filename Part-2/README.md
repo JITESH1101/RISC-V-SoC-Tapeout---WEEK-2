@@ -1765,7 +1765,20 @@ By looking at the waveform , same signals are plotted here too as we did with pr
 
 <img width="3973" height="1452" alt="post_synth_gtkwave_zoom" src="https://github.com/user-attachments/assets/44e553e0-c383-4949-9c47-3579b0ba94a0" />
 
+# Conclusion
 
+With these simulationa , synthesis and analysis for the waveforms , the following points are understood
+
+- RVMYTH ,PLL AND DAC are the key components of VSDBABYSOC
+
+- RVMYTH Microprocessor (RISC-V CPU) is the brain of the SoC and  handles all processing tasks and communicates with other components.
+
+- 8x Phase-Locked Loop (PLL) generates stable, synchronized clock signals and it  ensures CPU and DAC operate in harmony.
+
+- 10-bit Digital-to-Analog Converter (DAC) Converts digital signals from RVMYTH processor into analog output.
+
+- vsdbabysoc.v is the rtl used as top module which instantiates and connects all these modules for good functionality.
+- 
 
 
 
