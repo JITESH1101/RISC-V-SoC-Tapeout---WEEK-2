@@ -1611,6 +1611,35 @@ now lets go into the directory and check if the files are available
 
 these are the rtl files or modules of the SoC, we will  simulate and check their functionality
 
+But we see that the ``rvmyth.tlv`` file is in ``.tlv`` format, but for synthesis ``.tlv`` format isnt supported. 
+
+# TLV to Verilog Conversion for RVMYTH
+
+Initially, you will see only the rvmyth.tlv file inside src/module/, since the RVMYTH core is written in TL-Verilog. To convert it into a .v file for simulation, follow the steps below:
+
+```
+# Step 1: Install python3-venv 
+
+sudo apt update
+sudo apt install python3-venv python3-pip
+
+# Step 2: Create and activate a virtual environment
+
+cd VSDBabySoC/
+python3 -m venv sp_env
+source sp_env/bin/activate
+
+# Step 3: Install SandPiper-SaaS inside the virtual environment
+
+pip install pyyaml click sandpiper-saas
+
+# Step 4: Convert rvmyth.tlv to Verilog
+
+sandpiper-saas -i ./src/module/*.tlv -o rvmyth.v --bestsv --noline -p verilog --outdir ./src/module/
+```
+
+Now that we got the verilog file for this too, lets proceed with simulations
+
 # Pre-Synthesis Simulation Flow
 
 - We will simulate the RTL using Iverilog and verify its functionality before synthesis
