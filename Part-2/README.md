@@ -4,6 +4,12 @@
 
 Here is my project Structure of the directory where i used all the simulations and synthesis
 
+
+  - ``src/include/ ``- Contains header files (*.vh) with necessary macros or parameter definitions.
+  - ``src/module/ ``- Contains Verilog files for each module in the SoC design.
+  - ``output/ ``- Directory where compiled outputs and simulation files will be generated.
+
+
 ```
 .
 ├── images
@@ -1589,4 +1595,155 @@ Here is my project Structure of the directory where i used all the simulations a
 
 194 directories, 1387 files
 ```
+Here the structure might look lengthy but most of the files are part of `` sp_env`` directory which we will be creating and defining soon.
+The simplified or minimized form of the structure is as follows
+
+<img width="2829" height="2498" alt="project_structure" src="https://github.com/user-attachments/assets/27e2d8de-d58f-43d0-a214-b057d8dc6884" />
+
+to get this structure or for the rtl files of ``VSDBabySoc`` use the following command in linux terminal
+
+```
+git clone https://github.com/manili/VSDBabySoC.git
+```
+now lets go into the directory and check if the files are available
+
+<img width="1231" height="269" alt="rtl_files" src="https://github.com/user-attachments/assets/624e6c98-0ee9-40f7-96ed-64904a6268ac" />
+
+these are the rtl files or modules of the SoC, we will  simulate and check their functionality
+
+# Pre-Synthesis Simulation Flow
+
+- We will simulate the RTL using Iverilog and verify its functionality before synthesis
+- Macro: -DPRE_SYNTH_SIM
+- the outputs of the simulation are stored in the ``output/pre_synth_sim/pre_Synth_sim.out`` and ``output/pre_synth_sim/pre_Synth_sim.vcd``
+- ``.out`` is used to finish simulation and write the output into ``.vcd`` file
+- ``.vcd`` file is used to check the output waveform in ``gtkwave`` tool
+
+The following command is used to run simulation of the code with all the modules included 
+
+``
+iverilog -o output/pre_synth_sim/pre_synth_sim.out   -DPRE_SYNTH_SIM   -I src/include   -I src/module   src/module/testbench.v
+``
+
+the following is the terminal log of the entire simulation flow
+
+<img width="3568" height="984" alt="presynthesis_log" src="https://github.com/user-attachments/assets/8ee8b8a3-bb3c-4de2-a919-dc6fbee1b801" />
+
+Now by looking at the waveform , we see the following 
+
+<img width="3974" height="1755" alt="pre_synth_sim" src="https://github.com/user-attachments/assets/5801ae0c-7e9c-4b76-ab09-ab0f9121b4c2" />
+
+<img width="3974" height="1755" alt="pre_synth_sim_zoom" src="https://github.com/user-attachments/assets/4cd75758-06ed-460f-8aba-a528f8980498" />
+
+the above plotted waveform is on clk , reset , output of design , DAC signal and output of DAC.
+
+this waveform can be used as reference behaviour of the RTL of ``VSDBABYSOC``
+
+# Synthesis Flow
+
+Now that we have the Pre-synthesis simulation done , we are going to use ``Yosys`` tool to perform synthesis
+
+The purpose of doing synthesis is to get the netlist of the design and perform GLS or post synthesis Simulation to check if the design is having good behaviour even after synthesis
+
+The following are the steps to perform synthesis for this Soc Design
+
+- To invoke Yosys tool
+
+```
+Yosys
+```
+
+- To read the library files
+
+```
+read_liberty -lib /home/jitesh/SOC/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+read_liberty -lib src/lib/avsddac.lib
+ 
+read_liberty -lib src/lib/avsdpll.lib
+
+read_liberty -lib src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+```
+
+- To read the verilog files
+  
+```
+read_verilog  -sv -I src/include/ -I src/module/ src/module/vsdbabysoc.v src/module/clk_gate.v src/module/rvmyth.v
+```
+
+- To define the top module for synthesis
+
+```
+synth -top vsdbabysoc
+```
+
+<img width="1685" height="1810" alt="Screenshot from 2025-10-04 12-20-50" src="https://github.com/user-attachments/assets/27c433e2-2692-426c-8d46-a10cd10820ed" />
+
+<img width="2109" height="2247" alt="Screenshot from 2025-10-04 12-21-04" src="https://github.com/user-attachments/assets/62f3937e-05b5-44d9-9085-d624d774b9d3" />
+
+- To map the dff with the library file
+
+```
+dfflibmap -liberty /home/jitesh/SOC/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+```
+
+- To run the synthesis
+
+```
+abc -liberty src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+```
+
+- To write the netlist
+
+```
+write_verilog vsdbabysoc.synth.v
+```
+
+- To check the visual representation of the netlist
+
+```
+show vsdbabysoc
+```
+
+<img width="3963" height="752" alt="vsdbabysoc_show" src="https://github.com/user-attachments/assets/838f951b-6a95-4743-a0cc-5d559ff58391" />
+
+
+Now that the synthesis is done , lets verify if its functionality is same for post synthesis simulation too.
+
+# Post Synthesis Simulation Flow
+
+- Here we will compile the netlist along with the standard cells from the library with Iverilog
+- Macro: -DPOST_SYNTH_SIM
+- the outputs of the simulation are stored in the ``output/post_synth_sim/post_Synth_sim.out`` and ``output/post_synth_sim/post_Synth_sim.vcd``
+- ``.out`` is used to finish simulation and write the output into ``.vcd`` file
+- ``.vcd`` file is used to check the output waveform in ``gtkwave`` tool
+
+Before we start this simulation, to avoid errors , we have to copy and paste ``primitives.v`` and  ``sky130_fd_sc_hd.v`` in ``src/module`` . This is so because the testbench file will include these two files into simulation here , if these files are not placed here , the compiler might throw errors of misssing or file found when simulation is done.
+
+Now the command to run post synthesis simulation is as follows
+
+```
+iverilog -o output/post_synth_sim/post_synth_sim.out -DPOST_SYNTH_SIM  -I src/include/ -I src/module/ src/module/testbench.v
+```
+
+The following is terminal log of the simulation flow done 
+
+<img width="3573" height="774" alt="post_synth_log" src="https://github.com/user-attachments/assets/2bb5c780-f1d7-4045-9baa-77c8da96ab66" />
+
+By looking at the waveform , same signals are plotted here too as we did with pre-synthesis simulation and we notce that the behaviour is same.
+
+<img width="3973" height="1452" alt="post_synthesis_gtkwave" src="https://github.com/user-attachments/assets/563f7e15-a22d-4e09-9067-b41de4d9070b" />
+
+<img width="3973" height="1452" alt="post_synth_gtkwave_zoom" src="https://github.com/user-attachments/assets/44e553e0-c383-4949-9c47-3579b0ba94a0" />
+
+
+
+
+
+
+
+
+
+
+
 
